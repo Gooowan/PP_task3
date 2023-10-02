@@ -3,4 +3,9 @@ project(PP_task3)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(PP_task3 main.cpp)
+set(SOURCE_FILES
+        caesar_cipher.cpp
+        main.cpp
+)
+
+add_library(CaesarCipher SHARED ${SOURCE_FILES})
