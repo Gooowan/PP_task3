@@ -1,7 +1,7 @@
 #include <iostream>
 #include <dlfcn.h>
+#include <cstring>
 using namespace std;
-
 
 int main() {
     void* lib = dlopen("./caesar_cipher.dylib", RTLD_LAZY);
@@ -26,23 +26,35 @@ int main() {
     char input[100];
     int key;
 
-    cout << "Enter a line of text: ";
-    cin.getline(input, sizeof(input));
+    while (true) {
+        cout << "Enter a line of text, if you need help, type -h: ";
 
-    cout << "You entered: " << input << endl;
+        cin.getline(input, sizeof(input));
 
-    cout << "Enter an encryption key: ";
-    cin >> key;
+        if (strcmp(input, "stop") == 0) {
+            break;
+        }
 
-    char* encrypted = encrypt(input, key);
-    cout << "Encrypted: " << encrypted << endl;
+        if (strcmp(input, "-h") != 0) {
+            cout << "Enter an encryption key: ";
+            cin >> key;
 
-    char* decrypted = decrypt(encrypted, key);
-    cout << "Decrypted: " << decrypted << endl;
 
-    delete[] encrypted;
-    delete[] decrypted;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+            char *encrypted = encrypt(input, key);
+            cout << "Encrypted: " << encrypted << endl;
+
+            char *decrypted = decrypt(encrypted, key);
+            cout << "Decrypted: " << decrypted << endl;
+
+
+            delete[] encrypted;
+            delete[] decrypted;
+        } else {
+            cout << "\nYou should type a message that you would like to transfer and key to create a message transcribed with caesar cipher\n \n";
+        }
+    }
     dlclose(lib);
 
     return 0;
