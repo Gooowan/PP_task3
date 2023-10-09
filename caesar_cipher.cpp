@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 extern "C" char* encrypt(const char* rawText, int key) {
     size_t length = strlen(rawText);
@@ -6,7 +7,16 @@ extern "C" char* encrypt(const char* rawText, int key) {
 
     for (size_t i = 0; i < length; i++) {
         char originalChar = rawText[i];
-        char encryptedChar = static_cast<char>(originalChar + key);
+        char encryptedChar;
+
+        if (int(originalChar) + key > 127) {
+            while (int(originalChar) + key > 127){
+                key -= 127;
+            }
+            encryptedChar = static_cast<char>(originalChar + key);
+        } else {
+            encryptedChar = static_cast<char>(originalChar + key);
+        }
 
         if (originalChar >= 'a' && originalChar <= 'z') {
             if (encryptedChar > 'z') {
@@ -31,7 +41,16 @@ extern "C" char* decrypt(const char* rawText, int key) {
 
     for (size_t i = 0; i < length; i++) {
         char originalChar = rawText[i];
-        char decryptedChar = static_cast<char>(originalChar - key);
+        char decryptedChar;
+
+        if (int(originalChar) - key < 0) {
+            while (int(originalChar) - key < 0){
+                key -= 127;
+            }
+            decryptedChar = static_cast<char>(originalChar - key);
+        } else {
+            decryptedChar = static_cast<char>(originalChar - key);
+        }
 
         if (originalChar >= 'a' && originalChar <= 'z') {
             if (decryptedChar < 'a') {
