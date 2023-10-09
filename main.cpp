@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    void* lib = dlopen("./caesar_cipher.dylib", RTLD_LAZY);
+    void* lib = dlopen("./caesar_cipher.dylib1", RTLD_LAZY);
 
     if (!lib) {
         cerr << "Error loading the library: " << dlerror() << endl;
